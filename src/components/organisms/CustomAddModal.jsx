@@ -1,27 +1,53 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Button from '@/components/atoms/Button'
 import Input from '@/components/atoms/Input'
+import drinkTypeService from '@/services/api/drinkTypeService'
 import { toast } from 'react-toastify'
-
 const CustomAddModal = ({ 
   isOpen, 
   onClose, 
   onAdd,
   className = '' 
 }) => {
-  const [amount, setAmount] = useState('')
+const [amount, setAmount] = useState('')
   const [unit, setUnit] = useState('oz')
   const [drinkType, setDrinkType] = useState('water')
+  const [drinkTypes, setDrinkTypes] = useState([])
+  const [selectedMultiplier, setSelectedMultiplier] = useState(1.0)
   const [isLoading, setIsLoading] = useState(false)
 
-  const drinkTypes = [
-    { value: 'water', label: 'Water', icon: '💧' },
-    { value: 'tea', label: 'Tea', icon: '🍵' },
-    { value: 'coffee', label: 'Coffee', icon: '☕' }
-  ]
-
   const units = ['oz', 'ml', 'cups']
+
+  useEffect(() => {
+    const loadDrinkTypes = async () => {
+      try {
+        const types = await drinkTypeService.getActiveTypes()
+        setDrinkTypes(types)
+      } catch (error) {
+        console.error('Failed to load drink types:', error)
+      }
+    }
+    loadDrinkTypes()
+  }, [])
+
+  useEffect(() => {
+    const updateMultiplier = async () => {
+      try {
+        const multiplier = await drinkTypeService.getHydrationMultiplier(drinkType)
+        setSelectedMultiplier(multiplier)
+      } catch (error) {
+        setSelectedMultiplier(1.0)
+      }
+    }
+    updateMultiplier()
+  }, [drinkType])
+
+  const getHydrationPreview = () => {
+    if (!amount || amount <= 0) return null
+    const hydrationPoints = Math.round((Number(amount) * selectedMultiplier) * 100) / 100
+    return hydrationPoints !== Number(amount) ? hydrationPoints : null
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -74,12 +100,23 @@ const CustomAddModal = ({
           >
             <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
               <div className="text-center mb-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Add Custom Amount
-                </h3>
-                <p className="text-gray-600">
-                  Track your hydration with custom amounts
-                </p>
+<div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Add Custom Amount
+                  </h3>
+                  <p className="text-gray-600">
+                    Track your hydration with custom amounts
+                  </p>
+                </div>
+                {getHydrationPreview() && (
+                  <div className="text-right">
+                    <div className="text-sm text-gray-500">Hydration Value</div>
+                    <div className="text-lg font-semibold text-primary">
+                      {getHydrationPreview()} pts
+                    </div>
+                  </div>
+                )}
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -113,28 +150,35 @@ const CustomAddModal = ({
                   </div>
                 </div>
 
-                <div>
+<div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
                     Drink Type
                   </label>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto">
                     {drinkTypes.map((type) => (
                       <motion.button
                         key={type.value}
                         type="button"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={() => setDrinkType(type.value)}
                         className={`
-                          p-3 rounded-xl border-2 transition-all duration-200 text-center
+                          p-3 rounded-xl border-2 transition-all duration-200 text-left
                           ${drinkType === type.value 
                             ? 'border-primary bg-primary/5 text-primary' 
                             : 'border-gray-200 hover:border-gray-300'
                           }
                         `}
                       >
-                        <div className="text-2xl mb-1">{type.icon}</div>
-                        <div className="text-sm font-medium">{type.label}</div>
+                        <div className="flex items-center space-x-3">
+                          <span className="text-2xl">{type.icon}</span>
+                          <div className="flex-1">
+                            <div className="font-medium">{type.label}</div>
+                            <div className="text-xs text-gray-500">
+                              {Math.round(type.hydrationMultiplier * 100)}% effectiveness
+                            </div>
+                          </div>
+                        </div>
                       </motion.button>
                     ))}
                   </div>

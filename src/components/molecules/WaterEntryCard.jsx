@@ -27,13 +27,25 @@ const WaterEntryCard = ({
     }
   }
 
-  const getDrinkTypeIcon = (drinkType) => {
+const getDrinkTypeIcon = (drinkType) => {
     switch (drinkType) {
       case 'water': return 'Droplets'
       case 'tea': return 'Coffee'
       case 'coffee': return 'Coffee'
+      case 'juice': return 'GlassWater'
+      case 'milk': return 'Milk'
+      case 'sports-drink': return 'Zap'
+      case 'soda': return 'Sparkles'
+      case 'smoothie': return 'Cherry'
       default: return 'Droplets'
     }
+  }
+
+  const getEffectivenessColor = (multiplier) => {
+    if (multiplier >= 0.9) return 'text-green-600 bg-green-50'
+    if (multiplier >= 0.8) return 'text-blue-600 bg-blue-50'
+    if (multiplier >= 0.7) return 'text-yellow-600 bg-yellow-50'
+    return 'text-orange-600 bg-orange-50'
   }
 
   return (
@@ -57,15 +69,29 @@ const WaterEntryCard = ({
             />
           </div>
           
-          <div>
-            <div className="font-semibold text-gray-900">
-              {entry.amount}{entry.unit}
+<div>
+            <div className="flex items-center space-x-2">
+              <span className="font-semibold text-gray-900">
+                {entry.amount}{entry.unit}
+              </span>
+              {entry.hydrationMultiplier && entry.hydrationMultiplier !== 1.0 && (
+                <span className={`
+                  text-xs px-2 py-1 rounded-full font-medium
+                  ${getEffectivenessColor(entry.hydrationMultiplier)}
+                `}>
+                  {Math.round(entry.hydrationMultiplier * 100)}%
+                </span>
+              )}
             </div>
-            <div className="text-sm text-gray-500">
-              {format(new Date(entry.timestamp), 'h:mm a')}
+            <div className="flex items-center space-x-2 text-sm text-gray-500">
+              <span>{format(new Date(entry.timestamp), 'h:mm a')}</span>
+              {entry.hydrationPoints && entry.hydrationPoints !== entry.amount && (
+                <span className="text-primary">
+                  • {entry.hydrationPoints} hydration pts
+                </span>
+              )}
             </div>
           </div>
-        </div>
         
         <Button
           variant="ghost"

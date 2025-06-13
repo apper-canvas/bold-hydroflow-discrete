@@ -71,11 +71,16 @@ const TodaysLog = ({
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">
           Today's Log
-        </h2>
-        <div className="text-sm text-gray-500">
-          {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
+<div className="flex items-center justify-between">
+          <div className="text-sm text-gray-500">
+            {entries.length} {entries.length === 1 ? 'entry' : 'entries'}
+          </div>
+          <div className="text-sm font-medium text-primary">
+            {Math.round(entries.reduce((total, entry) => 
+              total + (entry.hydrationPoints || entry.amount), 0
+            ) * 100) / 100} hydration pts
+          </div>
         </div>
-      </div>
       
       <div className="space-y-3 max-h-96 overflow-y-auto">
         <AnimatePresence>

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "1",
+    "value": "water",
+    "label": "Water",
+    "icon": "💧",
+    "hydrationMultiplier": 1.0,
+    "category": "hydrating",
+    "active": true
+  },
+  {
+    "id": "2", 
+    "value": "tea",
+    "label": "Tea",
+    "icon": "🍵",
+    "hydrationMultiplier": 0.9,
+    "category": "mildly-caffeinated",
+    "active": true
+  },
+  {
+    "id": "3",
+    "value": "coffee", 
+    "label": "Coffee",
+    "icon": "☕",
+    "hydrationMultiplier": 0.8,
+    "category": "caffeinated",
+    "active": true
+  },
+  {
+    "id": "4",
+    "value": "juice",
+    "label": "Juice",
+    "icon": "🧃",
+    "hydrationMultiplier": 0.7,
+    "category": "sugary",
+    "active": true
+  },
+  {
+    "id": "5",
+    "value": "milk",
+    "label": "Milk", 
+    "icon": "🥛",
+    "hydrationMultiplier": 0.9,
+    "category": "nutritious",
+    "active": true
+  },
+  {
+    "id": "6",
+    "value": "sports-drink",
+    "label": "Sports Drink",
+    "icon": "🥤",
+    "hydrationMultiplier": 0.8,
+    "category": "electrolyte",
+    "active": true
+  },
+  {
+    "id": "7",
+    "value": "soda",
+    "label": "Soda",
+    "icon": "🥤",
+    "hydrationMultiplier": 0.6,
+    "category": "sugary-caffeinated",
+    "active": true
+  },
+  {
+    "id": "8",
+    "value": "smoothie",
+    "label": "Smoothie",
+    "icon": "🥤",
+    "hydrationMultiplier": 0.8,
+    "category": "nutritious",
+    "active": true
+  }
+]
