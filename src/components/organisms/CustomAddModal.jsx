@@ -98,9 +98,8 @@ const [amount, setAmount] = useState('')
             exit={{ opacity: 0, scale: 0.95 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
-            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-              <div className="text-center mb-6">
-<div className="flex items-center justify-between mb-6">
+<div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+              <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     Add Custom Amount
